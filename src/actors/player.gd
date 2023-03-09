@@ -46,24 +46,34 @@ func _physics_process(delta):
 	else: # If none of these are pressed
 		motion.x = lerp(motion.x, 0, 0.25) # set the x to 0 by smoothly transitioning by 0.25
 	print(isOnFloor)
-	if isOnFloor and Input.is_action_just_pressed("ui_up"): # If the ground checker is colliding with the ground
+	if isOnFloor and Input.is_action_just_pressed("ui_dash_right"):
+		gravity = 0
+		motion.y = -jump_height
+		yield(get_tree().create_timer(DASH_DURATION), "timeout")
+		gravity = 7
+		motion.x = speed * 13 + delta
+		print(speed)
+		yield(get_tree().create_timer(DASH_DURATION), "timeout")
+		#motion.y += gravity + delta
+		
+	if isOnFloor and Input.is_action_just_pressed("ui_dash_left"):
+		gravity = 0
+		motion.y = -jump_height
+		yield(get_tree().create_timer(DASH_DURATION), "timeout")
+		gravity = 7
+		motion.x = -speed * 13 + delta
+		print(speed)
+		yield(get_tree().create_timer(DASH_DURATION), "timeout")
+		#motion.y += gravity + delta
+	if isOnFloor and Input.is_action_just_pressed("ui_up"):
 		motion.y = -jump_height
 		can_jump = false
 		yield(get_tree().create_timer(jump_interval), "timeout")
 		can_jump = true
-	motion.y += gravity + delta 
-	if Input.is_action_just_released("dash"):
-		gravity = 0
-		motion.y = 0
-		if Input.is_action_just_pressed("ui_left"):
-			motion.x = -speed + delta
-		if Input.is_action_just_pressed("ui_right"):
-			motion.x = speed + delta
-		yield(get_tree().create_timer(DASH_DURATION), "timeout")
-		gravity = 7
-		motion.y += gravity + delta
-	
+		#motion.y += gravity + delta
+	motion.y += gravity + delta
 	motion = move_and_slide(motion, Vector2.UP)
 	# Move and slide is a function which allows the kinematic body to detect
 	# collisions and move accordingly
+
 
