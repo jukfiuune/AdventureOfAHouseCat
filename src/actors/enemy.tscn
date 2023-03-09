@@ -4,7 +4,7 @@
 [ext_resource path="res://src/actors/enemy.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 53.9252, 19.1288 )
+extents = Vector2( 89.4866, 19.1288 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 53.0507, 2.94952 )
@@ -21,15 +21,9 @@ position = Vector2( -1.38992e-06, -18.5961 )
 scale = Vector2( 1, 0.4 )
 texture = ExtResource( 1 )
 
-[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
-position = Vector2( 9.23043, 25.0465 )
-scale = Vector2( 1.84609, 1.59471 )
-rect = Rect2( -35, -40, 60, 25 )
-process_parent = true
-physics_process_parent = true
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -0.291492, -19.6131 )
+scale = Vector2( 1, 1 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
