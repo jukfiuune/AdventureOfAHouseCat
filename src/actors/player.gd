@@ -51,7 +51,7 @@ func _physics_process(delta):
 		can_jump = false
 		yield(get_tree().create_timer(jump_interval), "timeout")
 		can_jump = true
-		motion.y += gravity + delta # Always make the player fall down
+	motion.y += gravity + delta 
 	if Input.is_action_just_released("dash"):
 		gravity = 0
 		motion.y = 0
