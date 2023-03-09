@@ -3,9 +3,9 @@ extends KinematicBody2D # The player is a kinematic body, hence extends Kine..
 # Adjustable variables of the player
 # export is used to allow to edit the values outside the script
 export var speed = 500 # The speed of the character
-export var gravity = 12 # The gravity of the character
+export var gravity = 7 # The gravity of the character
 export var jump_height = 300 # The jump force of the character
-const DASH_DURATION = 0.5  # Dash duration in seconds
+const DASH_DURATION = 1  # Dash duration in seconds
 const DASH_SPEED = 1000  # Dash speed in pixels per second
 var can_dash = true
 var dash_timer = 0
@@ -14,8 +14,8 @@ const ACCELERATION = 700
 const FRICTION = 10
 var velocity = Vector2.ZERO
 var isOnFloor = false
-
-
+var can_jump = true
+var jump_interval = 0.5
 var motion = Vector2.ZERO 
 
 onready var raycast = $RayCast2D
@@ -48,9 +48,21 @@ func _physics_process(delta):
 	print(isOnFloor)
 	if isOnFloor and Input.is_action_just_pressed("ui_up"): # If the ground checker is colliding with the ground
 		motion.y = -jump_height
-
-	motion.y += gravity + delta # Always make the player fall down
-
+		can_jump = false
+		yield(get_tree().create_timer(jump_interval), "timeout")
+		can_jump = true
+		motion.y += gravity + delta # Always make the player fall down
+	if Input.is_action_just_released("dash"):
+		gravity = 0
+		motion.y = 0
+		if Input.is_action_just_pressed("ui_left"):
+			motion.x = -speed + delta
+		if Input.is_action_just_pressed("ui_right"):
+			motion.x = speed + delta
+		yield(get_tree().create_timer(DASH_DURATION), "timeout")
+		gravity = 7
+		motion.y += gravity + delta
+	
 	motion = move_and_slide(motion, Vector2.UP)
 	# Move and slide is a function which allows the kinematic body to detect
 	# collisions and move accordingly

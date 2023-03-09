@@ -1,11 +1,18 @@
+<<<<<<< Updated upstream
 [gd_scene load_steps=7 format=2]
+=======
+[gd_scene load_steps=4 format=2]
+>>>>>>> Stashed changes
 
 [ext_resource path="res://start-assets/tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://src/actors/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/actors/enemy.tscn" type="PackedScene" id=3]
+<<<<<<< Updated upstream
 [ext_resource path="res://src/actors/Dron.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/actors/Dron.gd" type="Script" id=5]
 [ext_resource path="res://Didi shit/CAT_SCRATCH_ANIMATION_014.png" type="Texture" id=8]
+=======
+>>>>>>> Stashed changes
 
 [node name="Level test" type="Node2D"]
 
@@ -22,6 +29,7 @@ position = Vector2( 1153, 742 )
 
 [node name="player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 80, 638 )
+<<<<<<< Updated upstream
 
 [node name="CatScratchAnimation014" type="Sprite" parent="."]
 position = Vector2( 134, 464 )
@@ -33,3 +41,5 @@ position = Vector2( 612, 187 )
 script = ExtResource( 5 )
 speed = Vector2( 300, 1000 )
 gravity = 4000.0
+=======
+>>>>>>> Stashed changes

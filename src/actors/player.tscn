@@ -16,7 +16,6 @@ script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -5.2817e-06, -23.8748 )
-scale = Vector2( 1, 1 )
 shape = SubResource( 1 )
 
 [node name="Player" type="Sprite" parent="."]
