@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://start-assets/tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://src/actors/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/actors/enemy.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/actors/Dron.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/actors/Dron.gd" type="Script" id=5]
 [ext_resource path="res://Didi shit/CAT_SCRATCH_ANIMATION_014.png" type="Texture" id=8]
 
 [node name="Level test" type="Node2D"]
@@ -31,3 +32,6 @@ texture = ExtResource( 8 )
 
 [node name="Dron" parent="." instance=ExtResource( 4 )]
 position = Vector2( 612, 187 )
+script = ExtResource( 5 )
+speed = Vector2( 300, 1000 )
+gravity = 4000.0
