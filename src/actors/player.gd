@@ -1,55 +1,32 @@
-extends KinematicBody2D
+extends KinematicBody2D # The player is a kinematic body, hence extends Kine..
 
-const FLOOR_NORMAL: = Vector2.UP
+# Adjustable variables of the player
+# export is used to allow to edit the values outside the script
+export var speed = 500 # The speed of the character
+export var gravity = 32 # The gravity of the character
+export var jumpforce = 800 # The jump force of the character
 
-export var speed: = Vector2(300.0,1000.0)
-export var gravity: = 4000.0
-
-var _velocity: = Vector2.ZERO
-
-export var stomp_impulse: = 1000.0
-
-
-func _on_EnemyDetector_area_entered(area: Area2D) -> void:
-	_velocity = calculate_stomp_velocity(_velocity, stomp_impulse)
-
-
+var motion = Vector2.ZERO 
 func _on_EnemyDetector_body_entered(body: PhysicsBody2D) -> void:
 	queue_free()
 
-
-func _physics_process(delta: float) -> void:
-	var is_jump_interrupted: = Input.is_action_just_released("jump") and _velocity.y < 0.0
-	var direction: = get_direction()
-	_velocity = calculate_move_velocity(_velocity, direction, speed, is_jump_interrupted)
-	_velocity = move_and_slide(_velocity, FLOOR_NORMAL)
-
-
-func get_direction() -> Vector2:
-	return Vector2(
-		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
-		-1.0 if Input.is_action_just_pressed("jump") and is_on_floor() else 0.0
-	)
-
-
-func calculate_move_velocity(
-		liner_velocity: Vector2,
-		direction: Vector2,
-		speed: Vector2,
-		is_jump_interrupted: bool
-	) -> Vector2:
-	var out: = liner_velocity
-	out.x = speed.x * direction.x	
-	out.y += gravity * get_physics_process_delta_time()
-	if direction.y == -1.0:
-		out.y = speed.y * direction.y
-	if is_jump_interrupted:
-		out.y = 0.0
-	return out
-
-
-func calculate_stomp_velocity(linear_velocity: Vector2, impulse: float) ->Vector2:
-	var out: = linear_velocity
-	out.y = -impulse
-	return out
-
+func _physics_process(delta): 
+	
+	# Player movement functions:
+	if Input.is_action_pressed("ui_right"): # If the player enters the right arrow
+		motion.x = speed # then the x coordinates of the vector be positive
+	elif Input.is_action_pressed("ui_left"): # If the player enters the left arrow
+		motion.x = -speed # then the x coordinates of the vector be negative
+	else: # If none of these are pressed
+		motion.x = lerp(motion.x, 0, 0.25) # set the x to 0 by smoothly transitioning by 0.25
+	
+	if is_on_floor(): # If the ground checker is colliding with the ground
+		if Input.is_action_pressed("ui_up"): # And the player hits the up arrow key
+			motion.y = -jumpforce # then jump by jumpforce
+	
+	motion.y += gravity + delta # Always make the player fall down
+	
+	motion = move_and_slide(motion, Vector2.UP)
+	# Move and slide is a function which allows the kinematic body to detect
+	# collisions and move accordingly
+	
