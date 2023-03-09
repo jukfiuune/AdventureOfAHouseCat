@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://start-assets/tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://src/actors/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/actors/enemy.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Didi shit/CAT_SCRATCH_ANIMATION_014.png" type="Texture" id=8]
 
 [node name="Level test" type="Node2D"]
 
@@ -21,3 +22,8 @@ position = Vector2( 1152, 600 )
 [node name="player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 80, 638 )
 speed = 500
+
+[node name="CatScratchAnimation014" type="Sprite" parent="."]
+position = Vector2( 134, 464 )
+scale = Vector2( 0.206667, 0.217333 )
+texture = ExtResource( 8 )

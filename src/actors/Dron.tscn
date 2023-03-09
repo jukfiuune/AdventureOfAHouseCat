@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://start-assets/enemy.png" type="Texture" id=1]
+[ext_resource path="res://src/actors/enemy.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 89.4866, 19.1288 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 53.0507, 2.94952 )
+
+[node name="Enemy" type="KinematicBody2D"]
+position = Vector2( 0, -0.999996 )
+scale = Vector2( 1.71534, 1.29059 )
+collision_layer = 2
+collision_mask = 9
+script = ExtResource( 2 )
+
+[node name="Enemy" type="Sprite" parent="."]
+position = Vector2( -1.38992e-06, -18.5961 )
+scale = Vector2( 1, 0.4 )
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -0.291492, -19.6131 )
+scale = Vector2( 1, 1 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2( -1.69407e-21, -41.2164 )
+shape = SubResource( 2 )
