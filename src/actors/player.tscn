@@ -4,10 +4,10 @@
 [ext_resource path="res://src/actors/player.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 19.5297, 28.8143 )
+extents = Vector2( 47.8039, 23.3904 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 22.736, 30.6062 )
+extents = Vector2( 49.2614, 26.732 )
 
 [node name="player" type="KinematicBody2D"]
 position = Vector2( 0, -0.999996 )
@@ -17,12 +17,13 @@ script = ExtResource( 2 )
 speed = Vector2( 800, 1400 )
 
 [node name="Player" type="Sprite" parent="."]
-position = Vector2( -0.291487, -32.5432 )
-scale = Vector2( 0.516176, -0.677985 )
+position = Vector2( 2.98023e-08, -23.2452 )
+scale = Vector2( 1, -0.5 )
 texture = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -0.291486, -29.2986 )
+position = Vector2( -5.2817e-06, -23.8748 )
+scale = Vector2( 1, 1 )
 shape = SubResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -36,7 +37,8 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetector"]
 modulate = Color( 0.152941, 0.133333, 0.823529, 1 )
-position = Vector2( -0.582975, -27.5068 )
+position = Vector2( 0.291473, -22.8578 )
+scale = Vector2( 1, 1 )
 shape = SubResource( 2 )
 
 [connection signal="area_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_area_entered"]
