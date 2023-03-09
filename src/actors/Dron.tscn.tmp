@@ -1,7 +1,20 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://start-assets/enemy.png" type="Texture" id=1]
-[ext_resource path="res://src/actors/Dron.gd" type="Script" id=2]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends KinematicBody2D
+
+
+func _ready() ->void:
+	_velocity.x = -speed.x
+
+
+func _physics_process(delta: float) ->void:
+	if is_on_wall():
+		_velocity.x *= -1.0
+	_velocity = move_and_slide(_velocity,  FLOOR_NORMAL)
+"
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 54.2166, 51.5994 )
@@ -11,7 +24,7 @@ position = Vector2( 0, -0.999996 )
 scale = Vector2( 1.71534, 1.29059 )
 collision_layer = 2
 collision_mask = 9
-script = ExtResource( 2 )
+script = SubResource( 2 )
 
 [node name="Enemy" type="Sprite" parent="."]
 position = Vector2( 0.874454, -60.4355 )
