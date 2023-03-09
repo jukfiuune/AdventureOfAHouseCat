@@ -20,7 +20,8 @@ _global_script_class_icons={
 
 [application]
 
-config/name="New world 123"
+config/name="HackTUES9Game"
+run/main_scene="res://src/Levels/Level test.tscn"
 config/icon="res://icon.png"
 
 [gui]
