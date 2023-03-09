@@ -1,5 +1,11 @@
-extends Actor
+extends KinematicBody2D
 
+const FLOOR_NORMAL: = Vector2.UP
+
+export var speed: = Vector2(300.0,1000.0)
+export var gravity: = 4000.0
+
+var _velocity: = Vector2.ZERO
 
 export var stomp_impulse: = 1000.0
 
