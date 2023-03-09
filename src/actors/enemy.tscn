@@ -30,10 +30,8 @@ physics_process_parent = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -0.291492, -19.6131 )
-scale = Vector2( 1, 1 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
 position = Vector2( -1.69407e-21, -41.2164 )
-scale = Vector2( 1, 1 )
 shape = SubResource( 2 )
