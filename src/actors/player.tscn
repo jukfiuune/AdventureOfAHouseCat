@@ -4,10 +4,10 @@
 [ext_resource path="res://src/actors/player.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 47.8039, 23.3904 )
+extents = Vector2( 39.9338, 23.3904 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 49.2614, 19.7584 )
+extents = Vector2( 41.9742, 21.3081 )
 
 [node name="player" type="KinematicBody2D"]
 position = Vector2( 0, -0.999996 )
@@ -17,7 +17,8 @@ gravity = 5
 jump_height = 370
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -5.2817e-06, -23.8748 )
+position = Vector2( -3.20636, -23.8748 )
+scale = Vector2( 1, 1 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -37,13 +38,15 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetector"]
 modulate = Color( 0.152941, 0.133333, 0.823529, 1 )
-position = Vector2( 0.291473, -27.5068 )
+position = Vector2( -2.91487, -29.0565 )
+scale = Vector2( 1, 1 )
 shape = SubResource( 2 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
-position = Vector2( 0.582975, -14.7219 )
+position = Vector2( -43.1401, -3.09944e-06 )
 enabled = true
-cast_to = Vector2( 0, 25 )
+cast_to = Vector2( 79.2846, -1.19209e-06 )
+collision_mask = 3
 
 [connection signal="area_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_area_entered"]
 [connection signal="body_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_body_entered"]

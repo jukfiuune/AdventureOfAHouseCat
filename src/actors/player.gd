@@ -51,6 +51,7 @@ func _physics_process(delta):
 	
 	velocity = velocity.linear_interpolate(Vector2.ZERO, FRICTION * delta)
 	if raycast.is_colliding() and coll.has_method("fall"):
+		velocity.x = 0
 		isOnFloor = true
 		if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
 			sprite.texture = load("res://src/Textures/CatIdleAni.tres")
