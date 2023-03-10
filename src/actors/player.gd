@@ -42,8 +42,10 @@ func _physics_process(delta):
 
 	if Input.is_action_pressed("ui_right"): # If the player enters the right arrow
 		motion.x = speed # then the x coordinates of the vector be positive
+		sprite.scale.x = 0.065
 	elif Input.is_action_pressed("ui_left"): # If the player enters the left arrow
 		motion.x = -speed # then the x coordinates of the vector be negative
+		sprite.scale.x = -0.065
 	else: # If none of these are pressed
 		motion.x = lerp(motion.x, 0, 0.25) # set the x to 0 by smoothly transitioning by 0.25
 	#print(isOnFloor)

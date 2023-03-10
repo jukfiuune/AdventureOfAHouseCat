@@ -17,7 +17,6 @@ gravity = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -3.20636, -23.8748 )
-scale = Vector2( 1, 1 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -37,7 +36,6 @@ monitorable = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetector"]
 modulate = Color( 0.152941, 0.133333, 0.823529, 1 )
 position = Vector2( -2.91488, -28.6691 )
-scale = Vector2( 1, 1 )
 shape = SubResource( 2 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
