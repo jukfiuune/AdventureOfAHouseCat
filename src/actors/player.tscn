@@ -39,9 +39,10 @@ position = Vector2( -2.91488, -28.6691 )
 shape = SubResource( 2 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
-position = Vector2( 0.582975, -14.7219 )
+position = Vector2( -41.3912, 1.54968 )
 enabled = true
-cast_to = Vector2( 0, 25 )
+cast_to = Vector2( 77.5357, 1.19209e-07 )
+collision_mask = 3
 
 [connection signal="area_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_area_entered"]
 [connection signal="body_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_body_entered"]
