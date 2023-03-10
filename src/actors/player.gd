@@ -29,6 +29,8 @@ onready var sprite = $Sprite
 #func _ready():
 #	set_floor_normal(Vector2(0, 1))  # Set the floor normal to point upward
 
+func _ready():
+	get_node("Camera2D").current = true;
 func _on_EnemyDetector_body_entered(body: PhysicsBody2D) -> void:
 	queue_free()
 func _physics_process(delta): 
@@ -49,7 +51,6 @@ func _physics_process(delta):
 	
 	velocity = velocity.linear_interpolate(Vector2.ZERO, FRICTION * delta)
 	if raycast.is_colliding() and coll.has_method("fall"):
-		velocity.x = 0
 		isOnFloor = true
 		if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
 			sprite.texture = load("res://src/Textures/CatIdleAni.tres")

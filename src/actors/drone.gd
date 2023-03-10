@@ -23,4 +23,5 @@ func _physics_process(delta: float) -> void:
 	_velocity.y = move_and_slide(_velocity, FLOOR_NORMAL).y
 	
 func fall() -> void:
+	yield(get_tree().create_timer(0.2), "timeout")
 	fall = true
