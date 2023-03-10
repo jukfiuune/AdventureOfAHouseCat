@@ -18,10 +18,14 @@ var can_jump = true
 var jump_interval = 0.5
 var motion = Vector2.ZERO 
 
+func _ready():
+	get_node("Camera2D").current = true;
+	
+
 onready var raycast = $RayCast2D
 onready var sprite = $Sprite
 
-#func set_floor_normal(normal: Vector2):
+#func set_floor_normal(normal: Vector2):     
 #	$CollisionShape2D.set_normal(normal)
 #
 #func _ready():
