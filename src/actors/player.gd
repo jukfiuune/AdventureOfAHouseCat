@@ -45,14 +45,14 @@ func _physics_process(delta):
 		motion.x = -speed # then the x coordinates of the vector be negative
 	else: # If none of these are pressed
 		motion.x = lerp(motion.x, 0, 0.25) # set the x to 0 by smoothly transitioning by 0.25
-	print(isOnFloor)
+	#print(isOnFloor)
 	if isOnFloor and Input.is_action_just_pressed("ui_dash_right"):
 		gravity = 0
 		motion.y = -jump_height
 		yield(get_tree().create_timer(DASH_DURATION), "timeout")
 		gravity = 7
 		motion.x = speed * 13 + delta
-		print(speed)
+		#print(speed)
 		yield(get_tree().create_timer(DASH_DURATION), "timeout")
 		#motion.y += gravity + delta
 		
@@ -62,7 +62,7 @@ func _physics_process(delta):
 		yield(get_tree().create_timer(DASH_DURATION), "timeout")
 		gravity = 7
 		motion.x = -speed * 13 + delta
-		print(speed)
+		#print(speed)
 		yield(get_tree().create_timer(DASH_DURATION), "timeout")
 		#motion.y += gravity + delta
 	if isOnFloor and Input.is_action_just_pressed("ui_up"):
