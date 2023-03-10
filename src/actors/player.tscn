@@ -13,6 +13,7 @@ extents = Vector2( 49.2614, 20.9207 )
 position = Vector2( 0, -0.999996 )
 scale = Vector2( 1.71534, 1.29059 )
 script = ExtResource( 2 )
+gravity = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -5.2817e-06, -23.8748 )
