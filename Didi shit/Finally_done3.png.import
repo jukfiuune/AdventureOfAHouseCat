@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/actual cat walk animation1.png-a4b038057bb6f9c44d44e2ed5b3267d7.stex"
+path="res://.import/Finally_done3.png-199c92a622f9f4c8f0f2149a9f535a26.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Didi shit/actual cat walk animation1.png"
-dest_files=[ "res://.import/actual cat walk animation1.png-a4b038057bb6f9c44d44e2ed5b3267d7.stex" ]
+source_file="res://Didi shit/Finally_done3.png"
+dest_files=[ "res://.import/Finally_done3.png-199c92a622f9f4c8f0f2149a9f535a26.stex" ]
 
 [params]
 
