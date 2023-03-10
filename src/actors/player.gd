@@ -21,6 +21,7 @@ var hasJumped = false
 #var triggerIdle = true
 
 onready var raycast = $RayCast2D
+onready var sprite = $Sprite
 
 #func set_floor_normal(normal: Vector2):
 #	$CollisionShape2D.set_normal(normal)
