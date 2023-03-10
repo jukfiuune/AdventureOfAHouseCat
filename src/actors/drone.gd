@@ -25,3 +25,6 @@ func _physics_process(delta: float) -> void:
 func fall() -> void:
 	yield(get_tree().create_timer(0.2), "timeout")
 	fall = true
+	
+func kill():
+	queue_free()

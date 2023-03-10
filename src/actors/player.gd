@@ -17,45 +17,63 @@ var isOnFloor = false
 var can_jump = true
 var jump_interval = 0.5
 var motion = Vector2.ZERO 
+var hasJumped = false
+#var triggerIdle = true
 
-func _ready():
-	get_node("Camera2D").current = true;
-	
-
-onready var raycast = $RayCast2D
+onready var floorCh = $RayCast2D
+onready var scratchCh = $RayCast2D2
 onready var sprite = $Sprite
 
-#func set_floor_normal(normal: Vector2):     
+#func set_floor_normal(normal: Vector2):
 #	$CollisionShape2D.set_normal(normal)
 #
 #func _ready():
 #	set_floor_normal(Vector2(0, 1))  # Set the floor normal to point upward
 
+func _ready():
+	get_node("Camera2D").current = true;
 func _on_EnemyDetector_body_entered(body: PhysicsBody2D) -> void:
 	queue_free()
 func _physics_process(delta): 
-	var coll = raycast.get_collider()
-	if raycast.is_colliding() and not coll.has_method("fall"):
+	var coll = floorCh.get_collider()
+	var scratch = scratchCh.get_collider()
+	if floorCh.is_colliding() and not coll.has_method("fall"):
 		isOnFloor = true
+		if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
+			sprite.texture = load("res://src/Textures/CatIdleAni.tres")
+			#triggerIdle=true
+		if can_jump:
+			hasJumped = false
 	else:
 		isOnFloor=false
-	if raycast.is_colliding() and coll.has_method("fall"):
+	if floorCh.is_colliding() and coll.has_method("fall"):
 		coll.fall()
 	# Player movement functions:
 	#handle_input(delta)
 	
 	velocity = velocity.linear_interpolate(Vector2.ZERO, FRICTION * delta)
-	if raycast.is_colliding() and coll.has_method("fall"):
+	if floorCh.is_colliding() and coll.has_method("fall"):
 		velocity.x = 0
 		isOnFloor = true
+		if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
+			sprite.texture = load("res://src/Textures/CatIdleAni.tres")
+			#triggerIdle = true
+		if can_jump:
+			hasJumped = false
 	velocity = move_and_slide(velocity)
 
 	if Input.is_action_pressed("ui_right"): # If the player enters the right arrow
 		motion.x = speed # then the x coordinates of the vector be positive
-		sprite.scale.x = 0.065
+		sprite.flip_h = false
+		if not hasJumped:
+			#triggerIdle = false
+			sprite.texture = load("res://src/Textures/CatWalkAni.tres")
 	elif Input.is_action_pressed("ui_left"): # If the player enters the left arrow
 		motion.x = -speed # then the x coordinates of the vector be negative
-		sprite.scale.x = -0.065
+		sprite.flip_h = true
+		if not hasJumped:
+			#triggerIdle = false
+			sprite.texture = load("res://src/Textures/CatWalkAni.tres")
 	else: # If none of these are pressed
 		motion.x = lerp(motion.x, 0, 0.25) # set the x to 0 by smoothly transitioning by 0.25
 	#print(isOnFloor)
@@ -80,10 +98,15 @@ func _physics_process(delta):
 		#motion.y += gravity + delta
 	if isOnFloor and Input.is_action_just_pressed("ui_up"):
 		motion.y = -jump_height
+		hasJumped = true
+		#triggerIdle = false
+		sprite.texture = load("res://src/Textures/CatJumpAni.tres")
 		can_jump = false
 		yield(get_tree().create_timer(jump_interval), "timeout")
 		can_jump = true
 		#motion.y += gravity + delta
+	if scratchCh.is_colliding() and scratch.has_method("kill") and Input.is_action_just_pressed("ui_left_mouse"):
+		scratch.kill()
 	motion.y += gravity + delta
 	motion = move_and_slide(motion, Vector2.UP)
 	# Move and slide is a function which allows the kinematic body to detect
