@@ -31,13 +31,19 @@ func _on_EnemyDetector_body_entered(body: PhysicsBody2D) -> void:
 	queue_free()
 func _physics_process(delta): 
 	var coll = raycast.get_collider()
-	if raycast.is_colliding():
+	if raycast.is_colliding() and not coll.has_method("fall"):
 		isOnFloor = true
 	else:
 		isOnFloor=false
+	if raycast.is_colliding() and coll.has_method("fall"):
+		coll.fall()
 	# Player movement functions:
 	#handle_input(delta)
+	
 	velocity = velocity.linear_interpolate(Vector2.ZERO, FRICTION * delta)
+	if raycast.is_colliding() and coll.has_method("fall"):
+		velocity.x = 0
+		isOnFloor = true
 	velocity = move_and_slide(velocity)
 
 	if Input.is_action_pressed("ui_right"): # If the player enters the right arrow

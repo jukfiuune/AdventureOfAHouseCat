@@ -19,3 +19,7 @@ func _physics_process(delta: float) -> void:
 		_velocity.x *= -1.0
 		sprite.scale.x *= -1
 	_velocity.y = move_and_slide(_velocity, FLOOR_NORMAL).y
+	
+func fall():
+	if not true:
+		print("Why?")
