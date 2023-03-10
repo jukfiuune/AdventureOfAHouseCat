@@ -20,6 +20,7 @@ var motion = Vector2.ZERO
 var hasJumped = false
 #var triggerIdle = true
 var is_rumba_dead = false
+var is_player_dead = false
 onready var floorCh = $RayCast2D
 onready var scratchCh = $RayCast2D2
 onready var sprite = $Sprite
@@ -33,92 +34,95 @@ onready var sprite = $Sprite
 func _ready():
 	get_node("Camera2D").current = true;
 func _on_EnemyDetector_body_entered(body: PhysicsBody2D) -> void:
-	queue_free()
+	kill()
 func _physics_process(delta): 
-	var coll = floorCh.get_collider()
-	var scratch = scratchCh.get_collider()
-	if floorCh.is_colliding() and not coll.has_method("fall"):
-		isOnFloor = true
-		if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
-			sprite.texture = load("res://src/Textures/CatIdleAni.tres")
-			#triggerIdle=true
-		if can_jump:
-			hasJumped = false
-	else:
-		isOnFloor=false
-	if floorCh.is_colliding() and coll.has_method("fall"):
-		coll.fall()
-	# Player movement functions:
-	#handle_input(delta)
-	
-	velocity = velocity.linear_interpolate(Vector2.ZERO, FRICTION * delta)
-	if floorCh.is_colliding() and coll.has_method("fall"):
-		velocity.x = 0
-		isOnFloor = true
-		if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
-			sprite.texture = load("res://src/Textures/CatIdleAni.tres")
-			#triggerIdle = true
-		if can_jump:
-			hasJumped = false
-	velocity = move_and_slide(velocity)
-
-	if Input.is_action_pressed("ui_right"): # If the player enters the right arrow
-		motion.x = speed # then the x coordinates of the vector be positive
-		sprite.flip_h = false
-		if not hasJumped:
-			#triggerIdle = false
-			sprite.texture = load("res://src/Textures/CatWalkAni.tres")
-	elif Input.is_action_pressed("ui_left"): # If the player enters the left arrow
-		motion.x = -speed # then the x coordinates of the vector be negative
-		sprite.flip_h = true
-		if not hasJumped:
-			#triggerIdle = false
-			sprite.texture = load("res://src/Textures/CatWalkAni.tres")
-	else: # If none of these are pressed
-		motion.x = lerp(motion.x, 0, 0.25) # set the x to 0 by smoothly transitioning by 0.25
-	#print(isOnFloor)
-	if isOnFloor and Input.is_action_just_pressed("ui_dash_right"):
-		gravity = 0
-		motion.y = -jump_height
-		yield(get_tree().create_timer(DASH_DURATION), "timeout")
-		gravity = 7
-		motion.x = speed * 13 + delta
-		#print(speed)
-		yield(get_tree().create_timer(DASH_DURATION), "timeout")
-		#motion.y += gravity + delta
+	if not is_player_dead:
+		var coll = floorCh.get_collider()
+		var scratch = scratchCh.get_collider()
+		if floorCh.is_colliding() and not coll.has_method("fall"):
+			isOnFloor = true
+			if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
+				sprite.texture = load("res://src/Textures/CatIdleAni.tres")
+				#triggerIdle=true
+			if can_jump:
+				hasJumped = false
+		else:
+			isOnFloor=false
+		if floorCh.is_colliding() and coll.has_method("fall"):
+			coll.fall()
+		# Player movement functions:
+		#handle_input(delta)
 		
-	if isOnFloor and Input.is_action_just_pressed("ui_dash_left"):
-		gravity = 0
-		motion.y = -jump_height
-		yield(get_tree().create_timer(DASH_DURATION), "timeout")
-		gravity = 7
-		motion.x = -speed * 13 + delta
-		#print(speed)
-		yield(get_tree().create_timer(DASH_DURATION), "timeout")
-		#motion.y += gravity + delta
-	if isOnFloor and Input.is_action_just_pressed("ui_up"):
-		motion.y = -jump_height
-		hasJumped = true
-		#triggerIdle = false
-		sprite.texture = load("res://src/Textures/CatJumpAni.tres")
-		can_jump = false
-		yield(get_tree().create_timer(jump_interval), "timeout")
-		can_jump = true
-		#motion.y += gravity + delta
+		velocity = velocity.linear_interpolate(Vector2.ZERO, FRICTION * delta)
+		if floorCh.is_colliding() and coll.has_method("fall"):
+			velocity.x = 0
+			isOnFloor = true
+			if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
+				sprite.texture = load("res://src/Textures/CatIdleAni.tres")
+				#triggerIdle = true
+			if can_jump:
+				hasJumped = false
+		velocity = move_and_slide(velocity)
+
+		if Input.is_action_pressed("ui_right"): # If the player enters the right arrow
+			motion.x = speed # then the x coordinates of the vector be positive
+			sprite.flip_h = false
+			if not hasJumped:
+				#triggerIdle = false
+				sprite.texture = load("res://src/Textures/CatWalkAni.tres")
+		elif Input.is_action_pressed("ui_left"): # If the player enters the left arrow
+			motion.x = -speed # then the x coordinates of the vector be negative
+			sprite.flip_h = true
+			if not hasJumped:
+				#triggerIdle = false
+				sprite.texture = load("res://src/Textures/CatWalkAni.tres")
+		else: # If none of these are pressed
+			motion.x = lerp(motion.x, 0, 0.25) # set the x to 0 by smoothly transitioning by 0.25
+		#print(isOnFloor)
+		if isOnFloor and Input.is_action_just_pressed("ui_dash_right"):
+			gravity = 0
+			motion.y = -jump_height
+			yield(get_tree().create_timer(DASH_DURATION), "timeout")
+			gravity = 7
+			motion.x = speed * 13 + delta
+			#print(speed)
+			yield(get_tree().create_timer(DASH_DURATION), "timeout")
+			#motion.y += gravity + delta
 			
-	motion.y += gravity + delta
-	motion = move_and_slide(motion, Vector2.UP)
-	# Move and slide is a function which allows the kinematic body to detect
-	# collisions and move accordingly
+		if isOnFloor and Input.is_action_just_pressed("ui_dash_left"):
+			gravity = 0
+			motion.y = -jump_height
+			yield(get_tree().create_timer(DASH_DURATION), "timeout")
+			gravity = 7
+			motion.x = -speed * 13 + delta
+			#print(speed)
+			yield(get_tree().create_timer(DASH_DURATION), "timeout")
+			#motion.y += gravity + delta
+		if isOnFloor and Input.is_action_just_pressed("ui_up"):
+			motion.y = -jump_height
+			hasJumped = true
+			#triggerIdle = false
+			sprite.texture = load("res://src/Textures/CatJumpAni.tres")
+			can_jump = false
+			yield(get_tree().create_timer(jump_interval), "timeout")
+			can_jump = true
+			#motion.y += gravity + delta
+			
+		motion.y += gravity + delta
+		motion = move_and_slide(motion, Vector2.UP)
+		# Move and slide is a function which allows the kinematic body to detect
+		# collisions and move accordingly
 	
-	if scratchCh.is_colliding() and scratch.has_method("kill") and Input.is_action_just_pressed("ui_left_mouse"):
-		scratch.kill()
-		if scratch.has_method("rumba"):
-			is_rumba_dead = true
+		if scratchCh.is_colliding() and scratch.has_method("kill") and Input.is_action_just_pressed("ui_left_mouse"):
+			scratch.kill()
+			if scratch.has_method("rumba"):
+				is_rumba_dead = true
 			
-	if scratchCh.is_colliding() and is_rumba_dead == false and scratch.has_method("firepl"):
-		position = Vector2(100,100)
-	if scratchCh.is_colliding() and scratch.has_method("deadly_tile"):
-		kill()
+		if scratchCh.is_colliding() and is_rumba_dead == false and scratch.has_method("firepl"):
+			position = Vector2(100,100)
+		if scratchCh.is_colliding() and scratch.has_method("deadly_tile"):
+			kill()
 func kill():
-	print(is_rumba_dead)
+	sprite.texture = load("res://src/Textures/CatDeathAni.tres")
+	is_player_dead = true
+	#print(is_rumba_dead)
