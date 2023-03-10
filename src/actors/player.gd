@@ -19,7 +19,7 @@ var jump_interval = 0.5
 var motion = Vector2.ZERO 
 var hasJumped = false
 #var triggerIdle = true
-
+var is_rumba_dead = false
 onready var floorCh = $RayCast2D
 onready var scratchCh = $RayCast2D2
 onready var sprite = $Sprite
@@ -105,11 +105,20 @@ func _physics_process(delta):
 		yield(get_tree().create_timer(jump_interval), "timeout")
 		can_jump = true
 		#motion.y += gravity + delta
-	if scratchCh.is_colliding() and scratch.has_method("kill") and Input.is_action_just_pressed("ui_left_mouse"):
-		scratch.kill()
+			
 	motion.y += gravity + delta
 	motion = move_and_slide(motion, Vector2.UP)
 	# Move and slide is a function which allows the kinematic body to detect
 	# collisions and move accordingly
-
-
+	
+	if scratchCh.is_colliding() and scratch.has_method("kill") and Input.is_action_just_pressed("ui_left_mouse"):
+		scratch.kill()
+		if scratch.has_method("rumba"):
+			is_rumba_dead = true
+			
+	if scratchCh.is_colliding() and is_rumba_dead == false and scratch.has_method("firepl"):
+		position = Vector2(100,100)
+	if scratchCh.is_colliding() and scratch.has_method("deadly_tile"):
+		kill()
+func kill():
+	print(is_rumba_dead)

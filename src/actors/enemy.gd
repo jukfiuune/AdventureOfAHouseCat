@@ -4,7 +4,7 @@ const FLOOR_NORMAL: = Vector2.UP
 
 export var speed: = Vector2(300.0,1000.0)
 export var gravity: = 4000.0
-var is_roomba_dead = false
+var is_rumba_dead = false
 var _velocity: = Vector2.ZERO
 
 onready var sprite = $Sprite
@@ -25,5 +25,9 @@ func fall():
 		print("Why?")
 
 func kill():
-	is_roomba_dead = true
-	queue_free()
+	_velocity.x = 0
+	_velocity.y = 0
+	
+func rumba():
+	if not true:
+		print("Why?")

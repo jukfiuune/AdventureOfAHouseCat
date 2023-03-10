@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/Textures/CatIdleAni.tres" type="Texture" id=1]
 [ext_resource path="res://src/actors/player.gd" type="Script" id=2]
@@ -8,6 +8,8 @@ extents = Vector2( 39.9338, 23.3904 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 41.9742, 21.3081 )
+
+[sub_resource type="GDScript" id=3]
 
 [node name="player" type="KinematicBody2D"]
 position = Vector2( 0, -0.999996 )
@@ -45,12 +47,14 @@ position = Vector2( -43.1401, -3.09944e-06 )
 enabled = true
 cast_to = Vector2( 79.2846, -1.19209e-06 )
 collision_mask = 3
+script = SubResource( 3 )
 
 [node name="RayCast2D2" type="RayCast2D" parent="."]
 position = Vector2( 13.4084, -6.97356 )
 enabled = true
 cast_to = Vector2( 35.5615, 19.371 )
 collision_mask = 2
+collide_with_areas = true
 
 [connection signal="area_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_area_entered"]
 [connection signal="body_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_body_entered"]
