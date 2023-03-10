@@ -20,7 +20,8 @@ var motion = Vector2.ZERO
 var hasJumped = false
 #var triggerIdle = true
 
-onready var raycast = $RayCast2D
+onready var floorCh = $RayCast2D
+onready var scratchCh = $RayCast2D2
 onready var sprite = $Sprite
 
 #func set_floor_normal(normal: Vector2):
@@ -34,8 +35,9 @@ func _ready():
 func _on_EnemyDetector_body_entered(body: PhysicsBody2D) -> void:
 	queue_free()
 func _physics_process(delta): 
-	var coll = raycast.get_collider()
-	if raycast.is_colliding() and not coll.has_method("fall"):
+	var coll = floorCh.get_collider()
+	var scratch = scratchCh.get_collider()
+	if floorCh.is_colliding() and not coll.has_method("fall"):
 		isOnFloor = true
 		if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
 			sprite.texture = load("res://src/Textures/CatIdleAni.tres")
@@ -44,13 +46,13 @@ func _physics_process(delta):
 			hasJumped = false
 	else:
 		isOnFloor=false
-	if raycast.is_colliding() and coll.has_method("fall"):
+	if floorCh.is_colliding() and coll.has_method("fall"):
 		coll.fall()
 	# Player movement functions:
 	#handle_input(delta)
 	
 	velocity = velocity.linear_interpolate(Vector2.ZERO, FRICTION * delta)
-	if raycast.is_colliding() and coll.has_method("fall"):
+	if floorCh.is_colliding() and coll.has_method("fall"):
 		velocity.x = 0
 		isOnFloor = true
 		if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
@@ -103,6 +105,8 @@ func _physics_process(delta):
 		yield(get_tree().create_timer(jump_interval), "timeout")
 		can_jump = true
 		#motion.y += gravity + delta
+	if scratchCh.is_colliding() and scratch.has_method("kill") and Input.is_action_just_pressed("ui_left_mouse"):
+		scratch.kill()
 	motion.y += gravity + delta
 	motion = move_and_slide(motion, Vector2.UP)
 	# Move and slide is a function which allows the kinematic body to detect
