@@ -11,8 +11,14 @@ config_version=4
 [application]
 
 config/name="HackTUES9Game"
-run/main_scene="res://src/Levels/Level test.tscn"
+run/main_scene="res://src/Levels/teste.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1920
+window/size/height=1080
+window/size/fullscreen=true
 
 [gui]
 

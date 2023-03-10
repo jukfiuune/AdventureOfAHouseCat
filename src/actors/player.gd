@@ -17,6 +17,8 @@ var isOnFloor = false
 var can_jump = true
 var jump_interval = 0.5
 var motion = Vector2.ZERO 
+var hasJumped = false
+#var triggerIdle = true
 
 func _ready():
 	get_node("Camera2D").current = true;
@@ -37,6 +39,11 @@ func _physics_process(delta):
 	var coll = raycast.get_collider()
 	if raycast.is_colliding() and not coll.has_method("fall"):
 		isOnFloor = true
+		if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
+			sprite.texture = load("res://src/Textures/CatIdleAni.tres")
+			#triggerIdle=true
+		if can_jump:
+			hasJumped = false
 	else:
 		isOnFloor=false
 	if raycast.is_colliding() and coll.has_method("fall"):
@@ -48,14 +55,25 @@ func _physics_process(delta):
 	if raycast.is_colliding() and coll.has_method("fall"):
 		velocity.x = 0
 		isOnFloor = true
+		if can_jump and not Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
+			sprite.texture = load("res://src/Textures/CatIdleAni.tres")
+			#triggerIdle = true
+		if can_jump:
+			hasJumped = false
 	velocity = move_and_slide(velocity)
 
 	if Input.is_action_pressed("ui_right"): # If the player enters the right arrow
 		motion.x = speed # then the x coordinates of the vector be positive
-		sprite.scale.x = 0.065
+		sprite.flip_h = false
+		if not hasJumped:
+			#triggerIdle = false
+			sprite.texture = load("res://src/Textures/CatWalkAni.tres")
 	elif Input.is_action_pressed("ui_left"): # If the player enters the left arrow
 		motion.x = -speed # then the x coordinates of the vector be negative
-		sprite.scale.x = -0.065
+		sprite.flip_h = true
+		if not hasJumped:
+			#triggerIdle = false
+			sprite.texture = load("res://src/Textures/CatWalkAni.tres")
 	else: # If none of these are pressed
 		motion.x = lerp(motion.x, 0, 0.25) # set the x to 0 by smoothly transitioning by 0.25
 	#print(isOnFloor)
@@ -80,6 +98,9 @@ func _physics_process(delta):
 		#motion.y += gravity + delta
 	if isOnFloor and Input.is_action_just_pressed("ui_up"):
 		motion.y = -jump_height
+		hasJumped = true
+		#triggerIdle = false
+		sprite.texture = load("res://src/Textures/CatJumpAni.tres")
 		can_jump = false
 		yield(get_tree().create_timer(jump_interval), "timeout")
 		can_jump = true
