@@ -24,6 +24,7 @@ var is_player_dead = false
 onready var floorCh = $RayCast2D
 onready var scratchCh = $RayCast2D2
 onready var sprite = $Sprite
+var choice_scene = preload("res://src/Levels/Choice.tscn")
 
 #func set_floor_normal(normal: Vector2):
 #	$CollisionShape2D.set_normal(normal)
@@ -50,6 +51,10 @@ func _physics_process(delta):
 			isOnFloor=false
 		if floorCh.is_colliding() and coll.has_method("fall"):
 			coll.fall()
+		if floorCh.is_colliding() and coll.has_method("interactive"):
+			get_parent().get_node("Lvl3DesignAll").visible = false
+			get_parent().get_node("Choice").visible = true
+			get_parent().get_node("AudioStreamPlayer2D").volume_db = -80
 		# Player movement functions:
 		#handle_input(delta)
 		
@@ -82,9 +87,12 @@ func _physics_process(delta):
 		if isOnFloor and Input.is_action_just_pressed("ui_dash_right"):
 			gravity = 0
 			motion.y = -jump_height
+			sprite.texture = load("res://src/Textures/CatJumpAni.tres")
+			can_jump = false
 			yield(get_tree().create_timer(DASH_DURATION), "timeout")
 			gravity = 7
 			motion.x = speed * 13 + delta
+			can_jump = true
 			#print(speed)
 			yield(get_tree().create_timer(DASH_DURATION), "timeout")
 			#motion.y += gravity + delta
@@ -92,9 +100,12 @@ func _physics_process(delta):
 		if isOnFloor and Input.is_action_just_pressed("ui_dash_left"):
 			gravity = 0
 			motion.y = -jump_height
+			sprite.texture = load("res://src/Textures/CatJumpAni.tres")
+			can_jump = false
 			yield(get_tree().create_timer(DASH_DURATION), "timeout")
 			gravity = 7
 			motion.x = -speed * 13 + delta
+			can_jump = true
 			#print(speed)
 			yield(get_tree().create_timer(DASH_DURATION), "timeout")
 			#motion.y += gravity + delta
@@ -103,25 +114,35 @@ func _physics_process(delta):
 			hasJumped = true
 			#triggerIdle = false
 			sprite.texture = load("res://src/Textures/CatJumpAni.tres")
+			sprite.texture = load("res://src/Textures/CatJumpAni.tres")
 			can_jump = false
 			yield(get_tree().create_timer(jump_interval), "timeout")
 			can_jump = true
 			#motion.y += gravity + delta
 			
-		motion.y += gravity + delta
-		motion = move_and_slide(motion, Vector2.UP)
 		# Move and slide is a function which allows the kinematic body to detect
 		# collisions and move accordingly
-	
-		if scratchCh.is_colliding() and scratch.has_method("kill") and Input.is_action_just_pressed("ui_left_mouse"):
-			scratch.kill()
-			if scratch.has_method("rumba"):
-				is_rumba_dead = true
+		if Input.is_action_just_pressed("ui_left_mouse"):
+			can_jump = false
+			sprite.texture = load("res://src/Textures/CatScratchAni.tres")
+			yield(get_tree().create_timer(jump_interval), "timeout")
+			can_jump=true
+			if scratchCh.is_colliding() and scratch.has_method("kill"):
+				scratch.kill()
+				if scratch.has_method("rumba"):
+					is_rumba_dead = true
 			
-		if scratchCh.is_colliding() and is_rumba_dead == false and scratch.has_method("firepl"):
-			position = Vector2(100,100)
+		if scratchCh.is_colliding() and scratch.has_method("firepl"):
+			if !is_rumba_dead:
+				position = Vector2(-355,537)
+			else:
+				get_node("/root/Node2D/l1 background/fireplace").texture = load("res://src/Textures/FireplaceEvilAni.tres")
 		if scratchCh.is_colliding() and scratch.has_method("deadly_tile"):
 			kill()
+		if scratchCh.is_colliding() and scratch.has_method("trust") and get_parent().get_node("Choice").visible == true:
+			kill()
+	motion.y += gravity + delta
+	motion = move_and_slide(motion, Vector2.UP)
 func kill():
 	sprite.texture = load("res://src/Textures/CatDeathAni.tres")
 	is_player_dead = true

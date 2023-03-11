@@ -1,0 +1,50 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://start-assets/tileset.tres" type="TileSet" id=1]
+[ext_resource path="res://src/actors/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Didi shit/lvl3_design.png" type="Texture" id=3]
+[ext_resource path="res://start-assets/deadly.tres" type="TileSet" id=4]
+[ext_resource path="res://src/Levels/Interactive.gd" type="Script" id=5]
+[ext_resource path="res://src/Levels/Choice.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Didi shit/lvl3_design_dark_box.png" type="Texture" id=7]
+[ext_resource path="res://music.MP3" type="AudioStream" id=8]
+
+[node name="Level3" type="Node2D"]
+
+[node name="Choice" parent="." instance=ExtResource( 6 )]
+visible = false
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 1240, 382 )
+texture = ExtResource( 7 )
+
+[node name="Lvl3DesignAll" type="Sprite" parent="."]
+position = Vector2( 1243, 400.25 )
+scale = Vector2( 0.9992, 0.912778 )
+texture = ExtResource( 3 )
+
+[node name="player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 323, 639 )
+scale = Vector2( 1.615, 1.291 )
+gravity = 6
+jump_height = 400
+
+[node name="TileMap" type="TileMap" parent="."]
+visible = false
+position = Vector2( -20, 0 )
+tile_set = ExtResource( 1 )
+cell_quadrant_size = 128
+format = 1
+tile_data = PoolIntArray( 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, 15, 0, 0, 16, 0, 0, 17, 0, 0, 18, 0, 0, 19, 0, 0, 20, 0, 0, 21, 0, 0, 22, 0, 0, 23, 0, 0, 24, 0, 0, 25, 0, 0, 26, 0, 0, 27, 0, 0, 28, 0, 0, 29, 0, 0, 30, 0, 0, 31, 0, 0, 32, 0, 0, 33, 0, 0, 34, 0, 0, 35, 0, 0, 36, 0, 0, 37, 0, 0, 38, 0, 0, 65536, 0, 0, 65574, 0, 0, 131072, 0, 0, 131110, 0, 0, 196608, 0, 0, 196646, 0, 0, 262144, 0, 0, 262182, 0, 0, 327680, 0, 0, 327718, 0, 0, 393216, 0, 0, 393254, 0, 0, 458752, 0, 0, 458790, 0, 0, 524288, 0, 0, 524326, 0, 0, 589824, 0, 0, 589862, 0, 0, 655360, 0, 0, 655398, 0, 0, 720896, 0, 0, 720897, 0, 0, 720898, 0, 0, 720899, 0, 0, 720900, 0, 0, 720901, 0, 0, 720902, 0, 0, 720903, 0, 0, 720904, 0, 0, 720905, 0, 0, 720906, 0, 0, 720907, 0, 0, 720908, 0, 0, 720909, 0, 0, 720910, 0, 0, 720911, 0, 0, 720912, 0, 0, 720913, 0, 0, 720914, 0, 0, 720915, 0, 0, 720916, 0, 0, 720917, 0, 0, 720918, 0, 0, 720919, 0, 0, 720920, 0, 0, 720921, 0, 0, 720922, 0, 0, 720923, 0, 0, 720924, 0, 0, 720925, 0, 0, 720926, 0, 0, 720927, 0, 0, 720928, 0, 0, 720929, 0, 0, 720930, 0, 0, 720931, 0, 0, 720932, 0, 0, 720933, 0, 0, 720934, 0, 0 )
+
+[node name="Interactive" type="TileMap" parent="."]
+visible = false
+tile_set = ExtResource( 4 )
+format = 1
+tile_data = PoolIntArray( 458767, 0, 0, 458768, 0, 0, 458769, 0, 0, 458770, 0, 0, 458771, 0, 0, 458772, 0, 0 )
+script = ExtResource( 5 )
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+position = Vector2( 1157, 443 )
+stream = ExtResource( 8 )
+autoplay = true
