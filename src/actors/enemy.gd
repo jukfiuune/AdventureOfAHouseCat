@@ -8,6 +8,7 @@ var is_rumba_dead = false
 var _velocity: = Vector2.ZERO
 
 onready var sprite = $Sprite
+onready var particles = $Particles2D
 
 
 func _ready() -> void :
@@ -27,6 +28,9 @@ func fall():
 func kill():
 	_velocity.x = 0
 	_velocity.y = 0
+	particles.emitting = true
+	
+	
 	
 func rumba():
 	if not true:
