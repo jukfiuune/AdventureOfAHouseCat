@@ -108,6 +108,16 @@ func _physics_process(delta):
 			can_jump = true
 			#print(speed)
 			yield(get_tree().create_timer(DASH_DURATION), "timeout")
+		if isOnFloor and Input.is_action_just_pressed("ui_dash_up"):
+			gravity = 0
+			motion.y = -jump_height
+			sprite.texture = load("res://src/Textures/CatJumpAni.tres")
+			can_jump = false
+			yield(get_tree().create_timer(DASH_DURATION), "timeout")
+			gravity = 7
+			can_jump = true
+			#print(speed)
+			yield(get_tree().create_timer(DASH_DURATION), "timeout")
 			#motion.y += gravity + delta
 		if isOnFloor and Input.is_action_just_pressed("ui_up"):
 			motion.y = -jump_height

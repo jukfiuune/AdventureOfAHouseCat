@@ -12,24 +12,21 @@ load_path = "res://.import/lvl 2 design_all.png-a94d775122d91823f26434e22d1f3da5
 
 [node name="Level 2" type="Node2D"]
 
+[node name="Lvl2DesignAll2" type="Sprite" parent="."]
+position = Vector2( 5114, 407.002 )
+scale = Vector2( 0.796314, 0.893333 )
+texture = SubResource( 1 )
+flip_h = true
+
+[node name="Lvl2DesignNoDoor" type="Sprite" parent="."]
+position = Vector2( 3075, 401.002 )
+scale = Vector2( 0.9992, 0.909276 )
+texture = ExtResource( 4 )
+
 [node name="Lvl2DesignAll" type="Sprite" parent="."]
 position = Vector2( 1243, 400.25 )
 scale = Vector2( 0.9992, 0.912778 )
 texture = SubResource( 1 )
-
-[node name="Lvl2DesignAll" type="Sprite" parent="Lvl2DesignAll"]
-position = Vector2( -1805, 2165 )
-
-[node name="Lvl2DesignAll" type="Sprite" parent="Lvl2DesignAll/Lvl2DesignAll"]
-position = Vector2( 5679.1, -2160.89 )
-scale = Vector2( 0.796952, 0.978697 )
-texture = SubResource( 1 )
-flip_h = true
-
-[node name="Lvl2DesignNoDoor" type="Sprite" parent="Lvl2DesignAll/Lvl2DesignAll"]
-position = Vector2( 3638.47, -2170.75 )
-scale = Vector2( 1, 0.996163 )
-texture = ExtResource( 4 )
 
 [node name="TileMap" type="TileMap" parent="."]
 visible = false
