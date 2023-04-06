@@ -35,11 +35,11 @@ let editMode = false,
   lvlData = {collBox:{x:[],y:[],w:[],h:[],stepable:[],created:[],enabled:[]}};
 
 function exportLevelData(){
-  return JSON.stringify(lvlData.collBox);
+  return JSON.stringify(lvlData);
 }
 
 function importLevelData(iLvlData){
-  lvlData.collBox = JSON.parse(iLvlData)
+  lvlData = JSON.parse(iLvlData)
 }
 
 function update() {
