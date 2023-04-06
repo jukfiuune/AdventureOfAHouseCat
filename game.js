@@ -1,6 +1,12 @@
 //setCanvasSize(800, 600);
 setFullscreen();
 
+let lvlABack = tryToLoad("lvlABack", "orange");
+
+
+
+
+
 let myX = 300,
   myY = 300,
   myW = 50,
@@ -17,7 +23,7 @@ let maxSpeed = 5,
   acceleration = 0.5,
   friction = 1.4,
   gravity = 0.05;
-  gravity/=2
+  //gravity/=2
 
 let isOnFloor = false,
   floorChecked = [],
@@ -26,7 +32,15 @@ let isOnFloor = false,
   dashTime = 0;
 
 let editMode = false,
-  collBox = {x:[],y:[],w:[],h:[],stepable:[],created:[],enabled:[]};
+  lvlData = {collBox:{x:[],y:[],w:[],h:[],stepable:[],created:[],enabled:[]}};
+
+function exportLevelData(){
+  return JSON.stringify(lvlData.collBox);
+}
+
+function importLevelData(iLvlData){
+  lvlData.collBox = JSON.parse(iLvlData)
+}
 
 function update() {
   if(!editMode){
@@ -88,61 +102,60 @@ function update() {
     }
     myX += myDX;
     myY += myDY;
-    for(let i = 0; i<collBox.x.length; i++){
-      if (areColliding(myX + 5, myY + myH, myW - 10, 1, collBox.x[i], collBox.y[i], collBox.w[i], collBox.h[i])) {
+    for(let i = 0; i<lvlData.collBox.x.length; i++){
+      if (areColliding(myX + 5, myY + myH, myW - 10, 1, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
         myY -= myDY;
         myDY = 0;
-        console.log("bottom");
+        //console.log("bottom");
         floorChecked[i]=true
       }
-      if (areColliding(myX + 5, myY, myW - 10, 1, collBox.x[i], collBox.y[i], collBox.w[i], collBox.h[i])) {
+      if (areColliding(myX + 5, myY, myW - 10, 1, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
         myY -= myDY;
         myDY = 0;
-        console.log("top");
+        //console.log("top");
       }
 
-      if (areColliding(myX, myY + 5, 1, myH - 10, collBox.x[i], collBox.y[i], collBox.w[i], collBox.h[i])) {
+      if (areColliding(myX, myY + 5, 1, myH - 10, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
         myX -= myDX;
         myDX = 0;
-        console.log("left");
+        //console.log("left");
       }
-      if (areColliding(myX + myW, myY + 5, 1, myH - 10, collBox.x[i], collBox.y[i], collBox.w[i], collBox.h[i])) {
+      if (areColliding(myX + myW, myY + 5, 1, myH - 10, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
         myX -= myDX;
         myDX = 0;
-        console.log("right");
+        //console.log("right");
       }
-      if(i==collBox.x.length-1){
+      if(i==lvlData.collBox.x.length-1){
         isOnFloor = false;
-        for(let j = 0; j<collBox.x.length; j++){
+        for(let j = 0; j<lvlData.collBox.x.length; j++){
           if(floorChecked[j]){
             isOnFloor=true;
           }
-          console.log(floorChecked + isOnFloor)
           floorChecked[j]=false;
-          
         }
         myDY += gravity;
       }
     }
 
   }else{
-    if(!collBox.created[collBox.x.length-1]){
-      collBox.w[collBox.x.length-1]=mouseX-collBox.x[collBox.x.length-1]
-      collBox.h[collBox.x.length-1]=mouseY-collBox.y[collBox.x.length-1]
+    if(!lvlData.collBox.created[lvlData.collBox.x.length-1]){
+      lvlData.collBox.w[lvlData.collBox.x.length-1]=mouseX-lvlData.collBox.x[lvlData.collBox.x.length-1]
+      lvlData.collBox.h[lvlData.collBox.x.length-1]=mouseY-lvlData.collBox.y[lvlData.collBox.x.length-1]
     }
   }
 }
 function draw() {
+  drawImage(lvlABack,0,0)
   context.strokeStyle = "black";
   context.strokeRect(0,0,canvas.width,canvas.height);
   context.fillStyle = "blue";
-  for(let i = 0; i<collBox.x.length; i++){
+  for(let i = 0; i<lvlData.collBox.x.length; i++){
     context.strokeStyle = "black";
     context.fillStyle = "blue";
-    if(collBox.created[i]){
-      context.fillRect(collBox.x[i], collBox.y[i], collBox.w[i], collBox.h[i]);
+    if(lvlData.collBox.created[i]){
+      context.fillRect(lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i]);
     }else{
-      context.strokeRect(collBox.x[i], collBox.y[i], collBox.w[i], collBox.h[i]);
+      context.strokeRect(lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i]);
     }
   }
   if(!editMode){
@@ -177,15 +190,15 @@ function keyup(key) {
 
 function mouseup() {
   if(editMode){
-    if(collBox.created[collBox.x.length-1]==undefined || collBox.created[collBox.x.length-1]){
-      collBox.x.push(mouseX);
-      collBox.y.push(mouseY);
-      collBox.w.push(mouseX);
-      collBox.h.push(mouseY);
+    if(lvlData.collBox.created[lvlData.collBox.x.length-1]==undefined || lvlData.collBox.created[lvlData.collBox.x.length-1]){
+      lvlData.collBox.x.push(mouseX);
+      lvlData.collBox.y.push(mouseY);
+      lvlData.collBox.w.push(mouseX);
+      lvlData.collBox.h.push(mouseY);
       floorChecked.push(false);
-      collBox.created.push(false);
-    }else if(!collBox.created[collBox.x.length-1]){
-      collBox.created[collBox.x.length-1]=true
+      lvlData.collBox.created.push(false);
+    }else if(!lvlData.collBox.created[lvlData.collBox.x.length-1]){
+      lvlData.collBox.created[lvlData.collBox.x.length-1]=true
     }
   }
 }
