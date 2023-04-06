@@ -17,6 +17,7 @@ let maxSpeed = 5,
   acceleration = 0.5,
   friction = 1.4,
   gravity = 0.05;
+  gravity/=2
 
 let isOnFloor = false,
   floorChecked = [],
@@ -111,13 +112,16 @@ function update() {
         console.log("right");
       }
       if(i==collBox.x.length-1){
+        isOnFloor = false;
         for(let j = 0; j<collBox.x.length; j++){
           if(floorChecked[j]){
             isOnFloor=true;
           }
           console.log(floorChecked + isOnFloor)
           floorChecked[j]=false;
+          
         }
+        myDY += gravity;
       }
     }
 
