@@ -1,7 +1,11 @@
 //setCanvasSize(800, 600);
 setFullscreen();
 
-let lvlABack = tryToLoad("lvlABack", "orange");
+let lvlABack = tryToLoad("lvlABack", "orange"),
+  lvlBStartBack = tryToLoad("lvlBStartBack", "pink"),
+  lvlBNDBack = tryToLoad("lvlBNDBack", "pink"),
+  lvlCBack = tryToLoad("lvlCBack", "blue"),
+  lvlCDarkBack = tryToLoad("lvlCBack", "grey");
 
 
 
@@ -13,6 +17,8 @@ let myX = 300,
   myH = 60,
   myDX = 0,
   myDY = 0;
+
+let cameraX=0;
 
 /*let wX = 200,
   wY = 400,
@@ -101,6 +107,7 @@ function update() {
       }
     }
     myX += myDX;
+    cameraX += myDX;
     myY += myDY;
     for(let i = 0; i<lvlData.collBox.x.length; i++){
       if (areColliding(myX + 5, myY + myH, myW - 10, 1, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
@@ -139,13 +146,14 @@ function update() {
 
   }else{
     if(!lvlData.collBox.created[lvlData.collBox.x.length-1]){
-      lvlData.collBox.w[lvlData.collBox.x.length-1]=mouseX-lvlData.collBox.x[lvlData.collBox.x.length-1]
+      lvlData.collBox.w[lvlData.collBox.x.length-1]=mouseX-lvlData.collBox.x[lvlData.collBox.x.length-1]+cameraX
       lvlData.collBox.h[lvlData.collBox.x.length-1]=mouseY-lvlData.collBox.y[lvlData.collBox.x.length-1]
     }
   }
 }
 function draw() {
-  drawImage(lvlABack,0,0)
+  drawImage(lvlCBack,0-cameraX,0);
+  drawImage(lvlCDarkBack,0-cameraX,0);
   context.strokeStyle = "black";
   context.strokeRect(0,0,canvas.width,canvas.height);
   context.fillStyle = "blue";
@@ -153,28 +161,28 @@ function draw() {
     context.strokeStyle = "black";
     context.fillStyle = "blue";
     if(lvlData.collBox.created[i]){
-      context.fillRect(lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i]);
+      context.fillRect(lvlData.collBox.x[i]-cameraX, lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i]);
     }else{
-      context.strokeRect(lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i]);
+      context.strokeRect(lvlData.collBox.x[i]-cameraX, lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i]);
     }
   }
   if(!editMode){
     context.fillStyle = "blue";
-    context.fillRect(myX, myY, myW, myH);
+    context.fillRect(myX-cameraX, myY, myW, myH);
 
     context.fillStyle = "green";
-    context.fillRect(myX + 5, myY + myH, myW - 10, 5);
+    context.fillRect(myX + 5-cameraX, myY + myH, myW - 10, 5);
 
     context.fillStyle = "red";
-    context.fillRect(myX + 5, myY, myW - 10, 5);
+    context.fillRect(myX + 5-cameraX, myY, myW - 10, 5);
 
     context.fillStyle = "yellow";
-    context.fillRect(myX, myY + 5, 5, myH - 10);
+    context.fillRect(myX-cameraX, myY + 5, 5, myH - 10);
 
     context.fillStyle = "purple";
-    context.fillRect(myX + myW, myY + 5, 5, myH - 10);
+    context.fillRect(myX + myW-cameraX, myY + 5, 5, myH - 10);
   }else{
-    context.strokeRect(myX, myY, myW, myH);
+    context.strokeRect(myX-cameraX, myY, myW, myH);
   }
 }
 
@@ -191,9 +199,9 @@ function keyup(key) {
 function mouseup() {
   if(editMode){
     if(lvlData.collBox.created[lvlData.collBox.x.length-1]==undefined || lvlData.collBox.created[lvlData.collBox.x.length-1]){
-      lvlData.collBox.x.push(mouseX);
+      lvlData.collBox.x.push(mouseX+cameraX);
       lvlData.collBox.y.push(mouseY);
-      lvlData.collBox.w.push(mouseX);
+      lvlData.collBox.w.push(mouseX+cameraX);
       lvlData.collBox.h.push(mouseY);
       floorChecked.push(false);
       lvlData.collBox.created.push(false);
