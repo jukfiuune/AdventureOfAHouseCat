@@ -7,13 +7,34 @@ let lvlABack = tryToLoad("lvlABack", "orange"),
   lvlCBack = tryToLoad("lvlCBack", "blue"),
   lvlCDarkBack = tryToLoad("lvlCBack", "grey");
 
+let cat = [[],[],[],[],[],[],[]];
+
+for (i=0;i<16;i++){
+  cat[0][i]=tryToLoad("cat[0]["+i+"]","grey");
+}
+for (i=0;i<3;i++){
+  cat[1][i]=tryToLoad("cat[1]["+i+"]","grey");
+}
+for (i=0;i<3;i++){
+  cat[2][i]=tryToLoad("cat[2]["+i+"]","grey");
+}
+for (i=0;i<4;i++){
+  cat[3][i]=tryToLoad("cat[3]["+i+"]","grey");
+}
+for (i=0;i<6;i++){
+  cat[4][i]=tryToLoad("cat[4]["+i+"]","grey");
+}
+for (i=0;i<6;i++){
+  cat[5][i]=tryToLoad("cat[5]["+i+"]","grey");
+}
+
 
 
 
 
 let myX = 300,
   myY = 300,
-  myW = 50,
+  myW = 120,
   myH = 60,
   myDX = 0,
   myDY = 0;
@@ -39,6 +60,7 @@ let isOnFloor = false,
 
 let editMode = false,
   lvlData = {collBox:{x:[],y:[],w:[],h:[],stepable:[],created:[],enabled:[]}};
+let typeAni=0, frameAni=0, cooldownAni=0, flipAni = 1, alreadyFlipped = true;
 
 function exportLevelData(){
   return JSON.stringify(lvlData);
@@ -53,8 +75,38 @@ function update() {
     if (myDX >= -maxSpeed && myDX <= maxSpeed && !dashExe) {
       if (isKeyPressed[key_left] || isKeyPressed[key_a]) {
         myDX -= acceleration;
+        if(flipAni == 1){
+          flipAni = 0;
+          alreadyFlipped = false;
+        }
+        if(cooldownAni==0){
+          frameAni++
+          cooldownAni++
+        }else if(cooldownAni>2){
+          cooldownAni=0
+        }else{
+          cooldownAni++
+        }
+        if(frameAni>15){
+          frameAni=0;
+        }
       } else if (isKeyPressed[key_right] || isKeyPressed[key_d]) {
         myDX += acceleration;
+        if(flipAni == 0){
+          flipAni = 1;
+          alreadyFlipped = false;
+        }
+        if(cooldownAni==0){
+          frameAni++
+          cooldownAni++
+        }else if(cooldownAni>2){
+          cooldownAni=0
+        }else{
+          cooldownAni++
+        }
+        if(frameAni>15){
+          frameAni=0;
+        }
       } else {
         myDX /= friction;
       }
@@ -167,8 +219,14 @@ function draw() {
     }
   }
   if(!editMode){
-    context.fillStyle = "blue";
-    context.fillRect(myX-cameraX, myY, myW, myH);
+    //context.fillStyle = "blue";
+    //context.fillRect(myX-cameraX, myY, myW, myH);
+    drawImage(cat[typeAni][frameAni],myX-cameraX-10, myY-20, myW+40, myH+20);
+    /*if(!alreadyFlipped){
+      context.translate(myX+myW+40, 0);
+      context.scale(-1, 1);
+      alreadyFlipped=true
+    }*/
 
     context.fillStyle = "green";
     context.fillRect(myX + 5-cameraX, myY + myH, myW - 10, 5);
