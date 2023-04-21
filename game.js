@@ -1,13 +1,14 @@
 //setCanvasSize(800, 600);
 setFullscreen();
 
-let lvlABack = tryToLoad("lvlABack", "orange"),
-  lvlBStartBack = tryToLoad("lvlBStartBack", "pink"),
-  lvlBNDBack = tryToLoad("lvlBNDBack", "pink"),
-  lvlCBack = tryToLoad("lvlCBack", "blue"),
-  lvlCDarkBack = tryToLoad("lvlCBack", "grey");
+let lvlA = tryToLoad("lvlA", "orange"),
+  lvlBDoor = tryToLoad("lvlBDoor", "pink"),
+  lvlBNDoor = tryToLoad("lvlBNDoor", "pink"),
+  lvlC = tryToLoad("lvlC", "blue"),
+  lvlCDark = tryToLoad("lvlCDark", "grey"),
+  lvlCDarkConsole = tryToLoad("lvlCDarkConsole", "grey");
 
-let cat = [[],[],[],[],[],[],[]];
+let cat = [[],[],[],[],[],[],[],[],[],[],[],[],[]];
 
 for (i=0;i<16;i++){
   cat[0][i]=tryToLoad("cat[0]["+i+"]","grey");
@@ -27,13 +28,31 @@ for (i=0;i<6;i++){
 for (i=0;i<6;i++){
   cat[5][i]=tryToLoad("cat[5]["+i+"]","grey");
 }
+for (i=0;i<16;i++){
+  cat[6][i]=tryToLoad("cat[6]["+i+"]","grey");
+}
+for (i=0;i<3;i++){
+  cat[7][i]=tryToLoad("cat[7]["+i+"]","grey");
+}
+for (i=0;i<3;i++){
+  cat[8][i]=tryToLoad("cat[8]["+i+"]","grey");
+}
+for (i=0;i<4;i++){
+  cat[9][i]=tryToLoad("cat[9]["+i+"]","grey");
+}
+for (i=0;i<6;i++){
+  cat[10][i]=tryToLoad("cat[10]["+i+"]","grey");
+}
+for (i=0;i<6;i++){
+  cat[11][i]=tryToLoad("cat[11]["+i+"]","grey");
+}
 
 
 
 
 
 let myX = 300,
-  myY = 300,
+  myY = 400,
   myW = 120,
   myH = 60,
   myDX = 0,
@@ -59,16 +78,19 @@ let isOnFloor = false,
   dashTime = 0;
 
 let editMode = false,
-  lvlData = {collBox:{x:[],y:[],w:[],h:[],stepable:[],created:[],enabled:[]}};
-let typeAni=0, frameAni=0, cooldownAni=0, flipAni = 1, alreadyFlipped = true;
+  lvlData = {collBox:{x:[],y:[],w:[],h:[],stepable:[],created:[],enabled:[], deadly:[]}};
+let typeAni=0, frameAni=0, cooldownAni=0, flipAni = 1;
 
 function exportLevelData(){
   return JSON.stringify(lvlData);
 }
 
 function importLevelData(iLvlData){
-  lvlData = JSON.parse(iLvlData)
+  //lvlData = JSON.parse(iLvlData)
+  lvlData = iLvlData
 }
+
+importLevelData(lvlAData)
 
 function update() {
   if(!editMode){
@@ -77,7 +99,6 @@ function update() {
         myDX -= acceleration;
         if(flipAni == 1){
           flipAni = 0;
-          alreadyFlipped = false;
         }
         if(cooldownAni==0){
           frameAni++
@@ -87,14 +108,13 @@ function update() {
         }else{
           cooldownAni++
         }
-        if(frameAni>15){
+        if(frameAni>cat[typeAni].length-1){
           frameAni=0;
         }
       } else if (isKeyPressed[key_right] || isKeyPressed[key_d]) {
         myDX += acceleration;
         if(flipAni == 0){
           flipAni = 1;
-          alreadyFlipped = false;
         }
         if(cooldownAni==0){
           frameAni++
@@ -167,22 +187,44 @@ function update() {
         myDY = 0;
         //console.log("bottom");
         floorChecked[i]=true
+        if(lvlData.collBox.deadly[i]){
+          myX=300;
+          myY=400;
+          cameraX = 0;
+        }
       }
       if (areColliding(myX + 5, myY, myW - 10, 1, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
         myY -= myDY;
         myDY = 0;
         //console.log("top");
+        if(lvlData.collBox.deadly[i]){
+          myX=300;
+          myY=400;
+          cameraX = 0;
+        }
       }
 
       if (areColliding(myX, myY + 5, 1, myH - 10, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
         myX -= myDX;
+        cameraX -= myDX;
         myDX = 0;
         //console.log("left");
+        if(lvlData.collBox.deadly[i]){
+          myX=300;
+          myY=400;
+          cameraX = 0;
+        }
       }
       if (areColliding(myX + myW, myY + 5, 1, myH - 10, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
         myX -= myDX;
+        cameraX -= myDX;
         myDX = 0;
         //console.log("right");
+        if(lvlData.collBox.deadly[i]){
+          myX=300;
+          myY=400;
+          cameraX = 0;
+        }
       }
       if(i==lvlData.collBox.x.length-1){
         isOnFloor = false;
@@ -204,14 +246,19 @@ function update() {
   }
 }
 function draw() {
-  drawImage(lvlCBack,0-cameraX,0);
-  drawImage(lvlCDarkBack,0-cameraX,0);
+  drawImage(lvlA,0-cameraX,0);
+  //drawImage(lvlCDarkBack,0-cameraX,0);
   context.strokeStyle = "black";
   context.strokeRect(0,0,canvas.width,canvas.height);
   context.fillStyle = "blue";
   for(let i = 0; i<lvlData.collBox.x.length; i++){
-    context.strokeStyle = "black";
-    context.fillStyle = "blue";
+    if(lvlData.collBox.deadly[i]){
+      context.fillStyle = "red";
+      context.strokeStyle = "red";
+    }else{
+      context.fillStyle = "blue";
+      context.strokeStyle = "blue";
+    }
     if(lvlData.collBox.created[i]){
       context.fillRect(lvlData.collBox.x[i]-cameraX, lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i]);
     }else{
@@ -221,7 +268,11 @@ function draw() {
   if(!editMode){
     //context.fillStyle = "blue";
     //context.fillRect(myX-cameraX, myY, myW, myH);
-    drawImage(cat[typeAni][frameAni],myX-cameraX-10, myY-20, myW+40, myH+20);
+    if(flipAni==0){
+      drawImage(cat[typeAni+6][frameAni],myX-cameraX-20, myY-20, myW+40, myH+20);
+    }else{
+      drawImage(cat[typeAni][frameAni],myX-cameraX-10, myY-20, myW+40, myH+20);
+    }
     /*if(!alreadyFlipped){
       context.translate(myX+myW+40, 0);
       context.scale(-1, 1);
@@ -240,6 +291,7 @@ function draw() {
     context.fillStyle = "purple";
     context.fillRect(myX + myW-cameraX, myY + 5, 5, myH - 10);
   }else{
+    context.strokeStyle = "black";
     context.strokeRect(myX-cameraX, myY, myW, myH);
   }
 }
@@ -252,6 +304,16 @@ function keyup(key) {
       editMode = true;
     }
   }
+  if(key==84){
+    if(!lvlData.collBox.created[lvlData.collBox.x.length-1]){
+      if(lvlData.collBox.deadly[lvlData.collBox.x.length-1]){
+        lvlData.collBox.deadly[lvlData.collBox.x.length-1]=false
+        console.log(lvlData.collBox.deadly[lvlData.collBox.x.length-1])
+      }else{
+        lvlData.collBox.deadly[lvlData.collBox.x.length-1]=true
+      }
+    }
+  }
 }
 
 function mouseup() {
@@ -261,6 +323,7 @@ function mouseup() {
       lvlData.collBox.y.push(mouseY);
       lvlData.collBox.w.push(mouseX+cameraX);
       lvlData.collBox.h.push(mouseY);
+      lvlData.collBox.deadly.push(false);
       floorChecked.push(false);
       lvlData.collBox.created.push(false);
     }else if(!lvlData.collBox.created[lvlData.collBox.x.length-1]){
@@ -268,3 +331,13 @@ function mouseup() {
     }
   }
 }
+
+/*function onscroll() {
+  if(!lvlData.collBox.created[lvlData.collBox.x.length-1]){
+    if(lvlData.collBox.deadly[lvlData.collBox.x.length-1]){
+      lvlData.collBox.deadly[lvlData.collBox.x.length-1]=false
+    }else{
+      lvlData.collBox.deadly[lvlData.collBox.x.length-1]=true
+    }
+  }
+}*/

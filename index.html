@@ -153,6 +153,7 @@
                 context.closePath();
             }
             </script>
+			<script src="levels.js"></script>
 			<!-- user's game file -->
 			<script src="game.js"></script>
 			<script>
@@ -226,6 +227,9 @@
 						mouseX = parseInt(touchobj.pageX - canvas.offsetLeft);
 						mouseY = parseInt(touchobj.pageY - canvas.offsetTop);
 					});
+					window.addEventListener("onscroll", function (e) {
+						onscroll();
+					});
 				}
 				window.addEventListener("mousemove", function (e) {
 					mouseX = e.pageX - canvas.offsetLeft;
@@ -259,6 +263,9 @@
 					window.addEventListener("keyup", function (e) {
 						isKeyPressed[e.keyCode] = 0;
 					});
+				}
+				if(typeof onscroll != "undefined") {
+					window.addEventListener("onscroll", onscroll);
 				}
 				if(typeof draw == "undefined") {
 					redraw = function () {
