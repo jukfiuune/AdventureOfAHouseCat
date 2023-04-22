@@ -80,7 +80,7 @@ let isOnFloor = false,
 let editMode = false,
   lvlData = {collBox:{x:[],y:[],w:[],h:[],stepable:[],created:[],enabled:[], deadly:[]}};
 let typeAni=0, frameAni=0, cooldownAni=0, flipAni = 1;
-let enemies = {x:1134,y:580,w:240,h:240,dx:-acceleration*3,dy:0,animation:0};
+let enemies = {x:1134,y:580,w:240,h:240,dx:-acceleration*3,dy:0,animation:0}, isOnEnemy = false;
 
 function exportLevelData(){
   return JSON.stringify(lvlData);
@@ -151,6 +151,7 @@ function update() {
       }
     }
     if (isOnFloor && !dashExe) {
+      isOnEnemy = false
       if (
         isKeyPressed[16] &&
         (isKeyPressed[32] ||
@@ -215,6 +216,14 @@ function update() {
           myY=400;
           cameraX = 0;
         }
+      }
+      if(areColliding(myX + 5, myY + myH, myW - 10, 1, enemies.x, enemies.y+180, enemies.w, enemies.h)){
+        myY -= myDY;
+        myX += enemies.dx
+        myDY = 0;
+        //console.log("bottom");
+        floorChecked[i]=true
+        isOnEnemy = true
       }
       if (areColliding(myX + 5, myY, myW - 10, 1, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
         myY -= myDY;
@@ -375,6 +384,10 @@ function mouseup() {
       lvlData.collBox.created.push(false);
     }else if(!lvlData.collBox.created[lvlData.collBox.x.length-1]){
       lvlData.collBox.created[lvlData.collBox.x.length-1]=true
+    }
+  }else{
+    if(isOnEnemy){
+      enemies.x = -100000
     }
   }
 }
