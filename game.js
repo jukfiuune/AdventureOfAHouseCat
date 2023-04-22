@@ -8,7 +8,7 @@ let lvlA = tryToLoad("lvlA", "orange"),
   lvlCDark = tryToLoad("lvlCDark", "grey"),
   lvlCDarkConsole = tryToLoad("lvlCDarkConsole", "grey");
 
-let cat = [[],[],[],[],[],[],[],[],[],[],[],[],[]];
+let cat = [[],[],[],[],[],[],[],[],[],[],[],[],[]], rumba = [tryToLoad("rumba[0]","grey"), tryToLoad("rumba[1]","grey")];
 
 for (i=0;i<16;i++){
   cat[0][i]=tryToLoad("cat[0]["+i+"]","grey");
@@ -80,6 +80,7 @@ let isOnFloor = false,
 let editMode = false,
   lvlData = {collBox:{x:[],y:[],w:[],h:[],stepable:[],created:[],enabled:[], deadly:[]}};
 let typeAni=0, frameAni=0, cooldownAni=0, flipAni = 1;
+let enemies = {x:1134,y:580,w:240,h:240,dx:-acceleration*3,dy:0,animation:0};
 
 function exportLevelData(){
   return JSON.stringify(lvlData);
@@ -201,6 +202,8 @@ function update() {
     myX += myDX;
     cameraX += myDX;
     myY += myDY;
+    enemies.x += enemies.dx
+    enemies.y += enemies.dy
     for(let i = 0; i<lvlData.collBox.x.length; i++){
       if (areColliding(myX + 5, myY + myH, myW - 10, 1, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
         myY -= myDY;
@@ -246,6 +249,25 @@ function update() {
           cameraX = 0;
         }
       }
+      if (areColliding(enemies.x + 5, enemies.y + enemies.h, enemies.w - 10, 1, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
+        enemies.y -= enemies.dy;
+        enemies.dy = 0;
+      }
+      if (areColliding(enemies.x + 5, enemies.y, enemies.w - 10, 1, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
+        enemies.y -= enemies.dy;
+        enemies.dy = 0;
+      }
+
+      if (areColliding(enemies.x + 30, enemies.y + 5, 1, enemies.h - 10, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
+        enemies.x -= enemies.dx;
+        enemies.dx = -enemies.dx;
+        enemies.animation = 1;
+      }
+      if (areColliding(enemies.x + enemies.w-30, enemies.y + 5, 1, enemies.h - 10, lvlData.collBox.x[i], lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i])) {
+        enemies.x -= enemies.dx;
+        enemies.dx = -enemies.dx;
+        enemies.animation = 0;
+      }
       if(i==lvlData.collBox.x.length-1){
         isOnFloor = false;
         for(let j = 0; j<lvlData.collBox.x.length; j++){
@@ -261,7 +283,7 @@ function update() {
         myDY += gravity;
       }
     }
-
+    enemies.dy += gravity
   }else{
     if(!lvlData.collBox.created[lvlData.collBox.x.length-1]){
       lvlData.collBox.w[lvlData.collBox.x.length-1]=mouseX-lvlData.collBox.x[lvlData.collBox.x.length-1]+cameraX
@@ -283,15 +305,16 @@ function draw() {
       context.fillStyle = "blue";
       context.strokeStyle = "blue";
     }
-    if(lvlData.collBox.created[i]){
+    /*if(lvlData.collBox.created[i]){
       context.fillRect(lvlData.collBox.x[i]-cameraX, lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i]);
     }else{
       context.strokeRect(lvlData.collBox.x[i]-cameraX, lvlData.collBox.y[i], lvlData.collBox.w[i], lvlData.collBox.h[i]);
-    }
+    }*/
   }
   if(!editMode){
     //context.fillStyle = "blue";
     //context.fillRect(myX-cameraX, myY, myW, myH);
+    drawImage(rumba[enemies.animation],enemies.x-cameraX,enemies.y,enemies.w,enemies.h)
     if(flipAni==0){
       drawImage(cat[typeAni+6][frameAni],myX-cameraX-20, myY-20, myW+40, myH+20);
     }else{
@@ -303,7 +326,7 @@ function draw() {
       alreadyFlipped=true
     }*/
 
-    context.fillStyle = "green";
+    /*context.fillStyle = "green";
     context.fillRect(myX + 5-cameraX, myY + myH, myW - 10, 5);
 
     context.fillStyle = "red";
@@ -313,7 +336,7 @@ function draw() {
     context.fillRect(myX-cameraX, myY + 5, 5, myH - 10);
 
     context.fillStyle = "purple";
-    context.fillRect(myX + myW-cameraX, myY + 5, 5, myH - 10);
+    context.fillRect(myX + myW-cameraX, myY + 5, 5, myH - 10);*/
   }else{
     context.strokeStyle = "black";
     context.strokeRect(myX-cameraX, myY, myW, myH);
@@ -321,7 +344,7 @@ function draw() {
 }
 
 function keyup(key) {
-  if(key==73){ //i
+  /*if(key==73){ //i
     if(editMode){
       editMode = false;
     }else{
@@ -337,7 +360,7 @@ function keyup(key) {
         lvlData.collBox.deadly[lvlData.collBox.x.length-1]=true
       }
     }
-  }
+  }*/
 }
 
 function mouseup() {
