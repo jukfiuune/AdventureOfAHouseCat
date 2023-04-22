@@ -97,6 +97,10 @@ function update() {
     if (myDX >= -maxSpeed && myDX <= maxSpeed && !dashExe) {
       if (isKeyPressed[key_left] || isKeyPressed[key_a]) {
         myDX -= acceleration;
+        if(typeAni != 0 && isOnFloor){
+          frameAni=0;
+          typeAni=0;
+        }
         if(flipAni == 1){
           flipAni = 0;
         }
@@ -108,11 +112,17 @@ function update() {
         }else{
           cooldownAni++
         }
-        if(frameAni>cat[typeAni].length-1){
+        if(frameAni>cat[typeAni].length-1 && typeAni == 0 && typeAni == 6){
           frameAni=0;
+        }else if(frameAni>cat[typeAni].length-1){
+          frameAni = cat[typeAni].length-1
         }
       } else if (isKeyPressed[key_right] || isKeyPressed[key_d]) {
         myDX += acceleration;
+        if(typeAni != 0 && isOnFloor){
+          frameAni=0;
+          typeAni=0;
+        }
         if(flipAni == 0){
           flipAni = 1;
         }
@@ -124,8 +134,10 @@ function update() {
         }else{
           cooldownAni++
         }
-        if(frameAni>15){
+        if(frameAni>cat[typeAni].length-1 && typeAni == 0 && typeAni == 6){
           frameAni=0;
+        }else if(frameAni>cat[typeAni].length-1){
+          frameAni = cat[typeAni].length-1
         }
       } else {
         myDX /= friction;
@@ -159,12 +171,20 @@ function update() {
       } else if (isKeyPressed[32] || isKeyPressed[87] || isKeyPressed[38]) {
         isOnFloor=false;
         myDY = -5;
+        if(typeAni != 1){
+          frameAni=0;
+          typeAni=1;
+        }
         myDY += gravity;
       }
     } else {
       myDY += gravity;
     }
     if (dashExe) {
+      if(typeAni != 2){
+        frameAni=0;
+        typeAni=2;
+      }
       myDY = -5;
       dashTime++;
       if (dashTime > 25) {
@@ -231,6 +251,10 @@ function update() {
         for(let j = 0; j<lvlData.collBox.x.length; j++){
           if(floorChecked[j]){
             isOnFloor=true;
+            if(typeAni != 5 && !isKeyPressed[key_left] && !isKeyPressed[key_a] && !isKeyPressed[key_right] && !isKeyPressed[key_d]){
+              frameAni = 0;
+              typeAni = 5;
+            }
           }
           floorChecked[j]=false;
         }
