@@ -9,7 +9,7 @@ The game's main character is called Melisiandra. She is stuck in her owner's hou
 
 # 🎮 How do I play?
 
-* **Main** Clone and open indexX.html (X is the level)
+* **Main**: Clone and open indexX.html (X is the level)
 * **Oldgodot**: Clone, open project in Godot 3, open the .tscn levels, then play scene!
 
 # Enjoy!
