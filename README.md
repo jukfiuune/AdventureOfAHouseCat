@@ -1,6 +1,6 @@
 <p align="center"><img width=12.5% src="./sources/Logo.png"></p>
 
-<p align:"center">Adventures of a house cat</p>
+<div align:"center">Adventures of a house cat</div>
 
 The game's main character is called Melisiandra. She is stuck in her owner's house which is hacked. Her objective is to escape by dodging all of the hacked machines and reaching the security consoles to upgrade the security.
 
