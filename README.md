@@ -1,4 +1,4 @@
-<p align="center"><img width=12.5% src="./sources/Logo.png"></p>
+<p align="center"><img width=12.5% src="./sources/RoundLogo.png"></p>
 
 <h1 align="center">
   Adventures of a house cat
